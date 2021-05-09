@@ -12,7 +12,12 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,8 +34,12 @@ class Splash extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.data == null) {
             return ChangeNotifierProvider<JoinOrLogin>.value(
-                value: JoinOrLogin(), child: AuthPage());
+                //로그인 정보 주는 프로바이더
+                // 로그인 되어 있지 않으므로 value 값 가지고 AuthPage 로 감.
+                value: JoinOrLogin(),
+                child: AuthPage());
           } else {
+            // 이미 로그인 되어 있으면 메인페이지로 email 넘김
             return MainPage(email: snapshot.data.email);
           }
         });

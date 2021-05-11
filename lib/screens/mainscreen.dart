@@ -18,19 +18,21 @@ class _TabScreenState extends State<TabScreen> {
     },
     {
       'title': 'Profile', //Profile
-      'page': MainPage(email: firebaseAuth.currentUser.email), // 완성되면 바꿀것 (언니꼬😘)
+      'page':
+          MainPage(email: firebaseAuth.currentUser.email), // 완성되면 바꿀것 (언니꼬😘)
       'index': 1,
     },
     {
       'title': 'Community', //Community
-      'page': MainPage(email: firebaseAuth.currentUser.email), // 완성되면 바꿀것 (내꺼 😎)
+      'page':
+          MainPage(email: firebaseAuth.currentUser.email), // 완성되면 바꿀것 (내꺼 😎)
       'index': 2,
     }
   ];
-  
+
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
+    return Scaffold(
       body: PageTransitionSwitcher(
         transitionBuilder: (
           Widget child,
@@ -52,9 +54,9 @@ class _TabScreenState extends State<TabScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(width: 5),
-                   Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      ),
+            Padding(
+              padding: const EdgeInsets.only(top: 5.0),
+            ),
             SizedBox(width: 5),
           ],
         ),

@@ -54,7 +54,7 @@ class StreamBuilderWrapper extends StatelessWidget {
                   },
                 );
         } else {
-          return circularProgress(context);
+//          return circularProgress(context);
         }
       },
     );

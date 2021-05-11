@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/join_or_login.dart';
-import 'package:flutter_application_1/helper/login_backgroud.dart'; // 이거 실제로 안씀. 
 import 'package:flutter_application_1/screens/main_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_1/screens/forgot_pw.dart';
@@ -21,11 +20,6 @@ class AuthPage extends StatelessWidget {
         body: Stack(
       alignment: Alignment.center,
       children: <Widget>[
-        // CustomPaint(
-        //   size: size,
-        //   painter:
-        //       LoginBackground(isJoin: Provider.of<JoinOrLogin>(context).isJoin),
-        // ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -35,23 +29,47 @@ class AuthPage extends StatelessWidget {
               children: <Widget>[
                 _inputForm(size),
                 _authButton(size),
-                GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MainPage(email: "비회원")));
-              },
-              child:  new Text(
-                "비회원으로 접속하기",
-                style: TextStyle(color: Colors.blue),
-              ),
-              
-            )
+
+                // // Start without login
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => MainPage(email: "비회원")));
+                //   },
+                //   child: new Text(
+                //     "비회원으로 접속하기",
+                //     style: TextStyle(fontSize: 15, color: Colors.blue),
+                //   ),
+                // )
               ],
             ),
+
+            SizedBox(height: 12.0),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              GestureDetector(
+                onTap: () {
+                  _anonLogin(context);
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => MainPage(email: )));
+                },
+                child: Text(
+                  'Login as Guest',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ]),
+
             Container(
-              height: size.height * 0.15,
+              height: size.height * 0.1,
             ),
-            //join or login 인지 정보 받아서 , 만약 sign in or create one 결정 .
+            //join or login 인지 정보 받아서 , sign in or create one 결정
             Consumer<JoinOrLogin>(
               builder: (context, joinOrLogin, child) => GestureDetector(
                   onTap: () {
@@ -65,16 +83,17 @@ class AuthPage extends StatelessWidget {
                         color: joinOrLogin.isJoin ? Colors.red : Colors.blue),
                   )),
             ),
+
             Container(
               height: size.height * 0.05,
             ),
-  
           ],
         )
       ],
     ));
   }
-// 이메일 패스 월드 등록하는 함수 
+
+// 이메일/비밀번호 등록하는 함수
   void _register(BuildContext context) async {
     final UserCredential result = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
@@ -92,7 +111,8 @@ class AuthPage extends StatelessWidget {
     // Navigator.push(context,
     //     MaterialPageRoute(builder: (context) => MainPage(email: user.email)));
   }
-// 로그인 하는 함수, 
+
+// 로그인 하는 함수
   void _login(BuildContext context) async {
     final UserCredential result = await FirebaseAuth.instance
         .signInWithEmailAndPassword(
@@ -110,23 +130,37 @@ class AuthPage extends StatelessWidget {
     // Navigator.push(context,
     //     MaterialPageRoute(builder: (context) => MainPage(email: user.email)));
   }
-//로고 이미지 불러옴. 
+
+// Guest Login
+  void _anonLogin(BuildContext context) async {
+    final UserCredential result =
+        await FirebaseAuth.instance.signInAnonymously();
+
+    final User user = result.user;
+
+    // Back to Main page code
+    // Navigator.push(context,
+    //     MaterialPageRoute(builder: (context) => MainPage(email: user.uid)));
+  }
+
+//로고 이미지 불러옴
   Widget get _logoImage => Expanded(
         child: Padding(
-          padding: const EdgeInsets.only(top: 120, left: 24, right: 24),
+          padding: const EdgeInsets.only(top: 80, left: 0, right: 0),
           child: Container(
-            height: 250,
-            width: 250,
+            //  height: 250,
+            //  width: 250,
             decoration: new BoxDecoration(
               image: DecorationImage(
                 //   fit: BoxFit.none,
-                image: AssetImage("assets/icon.jpg"),
+                image: AssetImage("assets/logo.png"),
               ),
             ),
           ),
         ),
       );
-// 로그인 또는 sign up 버튼임. 
+
+// 로그인 또는 sign up 버튼임.
   Widget _authButton(Size size) => Positioned(
         left: size.width * 0.1,
         right: size.width * 0.1,
@@ -150,7 +184,8 @@ class AuthPage extends StatelessWidget {
           ),
         ),
       );
-// 
+
+// 이메일/비밀번호 입력 창
   Widget _inputForm(Size size) => Padding(
         padding: EdgeInsets.all(size.width * 0.05),
         child: Card(
@@ -189,7 +224,7 @@ class AuthPage extends StatelessWidget {
                       },
                     ),
                     Container(
-                      height: 8,
+                      height: 10,
                     ),
                     Consumer<JoinOrLogin>(
                       builder: (context, joinOrLogin, child) => Opacity(

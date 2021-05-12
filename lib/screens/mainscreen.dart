@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/main_page.dart';
-import 'package:flutter_application_1/util/firebase.dart';
+import 'package:flutter_application_1/utils/firebase.dart';
 import 'package:animations/animations.dart';
 
 class TabScreen extends StatefulWidget {

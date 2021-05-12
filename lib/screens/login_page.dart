@@ -14,7 +14,7 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    //실제 핸드폰의 사이즈.
+    //실제 핸드폰의 사이즈
 
     return Scaffold(
         body: Stack(
@@ -106,10 +106,6 @@ class AuthPage extends StatelessWidget {
       );
       Scaffold.of(context).showSnackBar(snackBar);
     }
-
-    // Back to Main page code
-    // Navigator.push(context,
-    //     MaterialPageRoute(builder: (context) => MainPage(email: user.email)));
   }
 
 // 로그인 하는 함수
@@ -125,10 +121,6 @@ class AuthPage extends StatelessWidget {
       );
       Scaffold.of(context).showSnackBar(snackBar);
     }
-
-    // Back to Main page code
-    // Navigator.push(context,
-    //     MaterialPageRoute(builder: (context) => MainPage(email: user.email)));
   }
 
 // Guest Login
@@ -138,9 +130,12 @@ class AuthPage extends StatelessWidget {
 
     final User user = result.user;
 
-    // Back to Main page code
-    // Navigator.push(context,
-    //     MaterialPageRoute(builder: (context) => MainPage(email: user.uid)));
+    if (user == null) {
+      final snackBar = SnackBar(
+        content: Text('Please try again later.'),
+      );
+      Scaffold.of(context).showSnackBar(snackBar);
+    }
   }
 
 //로고 이미지 불러옴

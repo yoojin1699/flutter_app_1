@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/join_or_login.dart';
 import 'package:flutter_application_1/screens/main_page.dart';
-import 'package:flutter_application_1/screens/login.dart';
+import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

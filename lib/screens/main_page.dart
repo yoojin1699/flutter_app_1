@@ -1,5 +1,8 @@
+// bottomnavbar의 각 page 설정
+
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/mypage.dart';
+import 'package:flutter_application_1/screens/profile_page.dart';
+import 'package:flutter_application_1/screens/edit_profile_page.dart';
 import 'package:flutter_application_1/screens/temp.dart';
 
 class MainPage extends StatelessWidget {
@@ -24,16 +27,17 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   final List<Widget> viewContainer = [
-    TempScreen(),
-    TempScreen(),
-    TempScreen(),
-    TempScreen(),
-    MyPage()
+    TempScreen(), // mapping
+    TempScreen(), // feed
+    TempScreen(), // create post
+    TempScreen(), // kakao pay
+    ProfilePage()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // bottomNavigationBar 적용
       bottomNavigationBar: CustomBottomNavigationBar(
         iconList: [
           Icons.home_outlined,
@@ -121,7 +125,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         child: Icon(
           icon,
           color: index == _selectedIndex ? Colors.black : Colors.grey,
-          size: 30.0,
+          size: 28.0,
         ),
       ),
     );

@@ -7,7 +7,7 @@ typedef ItemBuilder<T> = Widget Function(
   DocumentSnapshot doc,
 );
 
-class StreamBuilderWrapper extends StatelessWidget {
+class CommentsStreamWrapper extends StatelessWidget {
   final Stream<dynamic> stream;
   final ItemBuilder<DocumentSnapshot> itemBuilder;
   final Axis scrollDirection;
@@ -15,7 +15,7 @@ class StreamBuilderWrapper extends StatelessWidget {
   final ScrollPhysics physics;
   final EdgeInsets padding;
 
-  const StreamBuilderWrapper({
+  const CommentsStreamWrapper({
     Key key,
     @required this.stream,
     @required this.itemBuilder,
@@ -32,19 +32,17 @@ class StreamBuilderWrapper extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var list = snapshot.data.documents.toList();
-
           return list.length == 0
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 100.0),
-                  child: Container(
-                    height: 60.0,
-                    width: 100.0,
-                    child: Center(
-                      child: Text('No Posts'),
+              ? Container(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Text('No comments'),
                     ),
                   ),
                 )
               : ListView.builder(
+                  reverse: true,
                   padding: padding,
                   scrollDirection: scrollDirection,
                   itemCount: list.length,
@@ -55,17 +53,7 @@ class StreamBuilderWrapper extends StatelessWidget {
                   },
                 );
         } else {
-          //return circularProgress(context);
-          return Padding(
-            padding: const EdgeInsets.only(top: 100.0),
-            child: Container(
-              height: 60.0,
-              width: 100.0,
-              child: Center(
-                child: Text('No Posts'),
-              ),
-            ),
-          );
+          return circularProgress(context);
         }
       },
     );

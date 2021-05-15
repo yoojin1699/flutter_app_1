@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> viewContainer = [
     TempScreen(), // mapping
     Timeline(), // feed
-   FabcontainerPage(), // create post
+    FabcontainerPage(), // create post
     TempScreen(), // kakao pay
     ProfilePage()
   ];

@@ -5,6 +5,7 @@ import 'package:flutter_application_1/helper/login_backgroud.dart';
 import 'package:flutter_application_1/screens/main_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_1/screens/forgot_pw.dart';
+import 'package:flutter_application_1/base_map.dart';
 
 class AuthPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -189,6 +190,9 @@ class AuthPage extends StatelessWidget {
 
   goToForgotPw(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ForgotPw()));
+            context,
+            MaterialPageRoute(
+              builder: (context) => BaseMapPage(),
+            ));
   }
 }

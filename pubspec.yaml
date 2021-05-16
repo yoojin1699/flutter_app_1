@@ -31,6 +31,7 @@ dependencies:
   firebase_core: ^1.1.0
   firebase_auth: ^1.1.3
   font_awesome_flutter: ^9.0.0
+  naver_map_plugin: ^0.9.6
 
 dev_dependencies:
   flutter_test:

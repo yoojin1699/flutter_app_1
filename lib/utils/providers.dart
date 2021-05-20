@@ -1,0 +1,18 @@
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
+
+import 'package:flutter_application_1/view_models/auth/posts_view_model.dart';
+//import 'package:flutter_application_1/view_models/conversation/conversation_view_model.dart';
+//import 'package:flutter_application_1/view_models/profile/edit_profile_view_model.dart';
+//import 'package:flutter_application_1/view_models/user/user_view_model.dart';
+import 'package:flutter_application_1/utils/constants.dart';
+
+List<SingleChildWidget> providers = [
+ // ChangeNotifierProvider(create: (_) => RegisterViewModel()),
+  //ChangeNotifierProvider(create: (_) => LoginViewModel()),
+  ChangeNotifierProvider(create: (_) => PostsViewModel()),
+  //ChangeNotifierProvider(create: (_) => EditProfileViewModel()),
+  //ChangeNotifierProvider(create: (_) => ConversationViewModel()),
+  //ChangeNotifierProvider(create: (_) => UserViewModel()),
+  ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+];

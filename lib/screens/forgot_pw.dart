@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+//stateful widget forgot pw 
 class ForgotPw extends StatefulWidget {
   @override
   _ForgotPwState createState() => _ForgotPwState();
@@ -25,6 +25,7 @@ class _ForgotPwState extends State<ForgotPw> {
               decoration: InputDecoration(
                   icon: Icon(Icons.account_circle), labelText: "Email"),
               validator: (String value) {
+                // value가 정확하지 않다면, 
                 if (value.isEmpty) {
                   return "Please input correct Email.";
                 }
@@ -32,6 +33,7 @@ class _ForgotPwState extends State<ForgotPw> {
               },
             ),
             FlatButton(
+              // 버튼 누르면 , password 리셋함. 
                 onPressed: () async {
                   await FirebaseAuth.instance
                       .sendPasswordResetEmail(email: _emailController.text);
@@ -40,6 +42,7 @@ class _ForgotPwState extends State<ForgotPw> {
                   );
                   Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
                 },
+                
                 child: Text('Reset Password'))
           ],
         ),

@@ -1,9 +1,12 @@
 // bottomnavbar의 각 page 설정
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/profile_page.dart';
 import 'package:flutter_application_1/screens/edit_profile_page.dart';
 import 'package:flutter_application_1/screens/temp.dart';
+import 'package:flutter_application_1/screens/feeds.dart';
+import 'package:flutter/cupertino.dart';
+
+import 'FabcontainerPage.dart';
 
 class MainPage extends StatelessWidget {
   // 메인 페이지: 인자 email
@@ -28,8 +31,8 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> viewContainer = [
     TempScreen(), // mapping
-    TempScreen(), // feed
-    TempScreen(), // create post
+    Timeline(), // feed
+    FabcontainerPage(), // create post
     TempScreen(), // kakao pay
     ProfilePage()
   ];
@@ -91,6 +94,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     List<Widget> _navBarItemList = [];
 
     for (var i = 0; i < _iconList.length; i++) {
+
       _navBarItemList.add(buildNavBarItem(_iconList[i], i));
     }
 

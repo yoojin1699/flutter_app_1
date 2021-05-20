@@ -5,6 +5,9 @@ import 'package:flutter_application_1/data/join_or_login.dart';
 import 'package:flutter_application_1/screens/main_page.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_application_1/utils/providers.dart';
+import 'package:flutter_application_1/utils/constants.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +23,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider (
+        providers: providers,
+        child: Consumer<ThemeNotifier>(
+        builder: (context, ThemeNotifier notifier, child) {
+      return MaterialApp(
       home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
@@ -33,7 +40,8 @@ class _MyAppState extends State<MyApp> {
                   value: JoinOrLogin(),
                   child: AuthPage());
           }),
-    );
+    );}
+    ));
   }
 }
 

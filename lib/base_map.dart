@@ -1,8 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:flutter_application_1/themes/light_color.dart';
+import 'package:flutter_application_1/themes/theme.dart';
+import 'package:flutter_application_1/widgets/title_text.dart';
+import 'package:flutter_application_1/widgets/extentions.dart';
+
 
 class BaseMapPage extends StatefulWidget {
   @override
@@ -13,6 +19,7 @@ class _BaseMapPageState extends State<BaseMapPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   Completer<NaverMapController> _controller = Completer();
   List<Marker> _markers = [];
+  bool detail = false;
 
   @override
   void initState() {
@@ -22,7 +29,7 @@ class _BaseMapPageState extends State<BaseMapPage> {
         context: context,
       ).then((image) {
         setState(() {
-          _markers.add(Marker(
+          Marker(
               markerId: 'id',
               position: LatLng(37.563600, 126.962370),
               captionText: "커스텀 아이콘",
@@ -31,13 +38,90 @@ class _BaseMapPageState extends State<BaseMapPage> {
               alpha: 0.8,
               icon: image,
               anchor: AnchorPoint(0.5, 1),
+              minZoom: 10,
+              captionMinZoom: 10,
               width: 45,
               height: 45,
               infoWindow: '인포 윈도우',
-              onMarkerTab: _onMarkerTap));
+              onMarkerTab: _onMarkerTap);
         });
       });
     });
+    /*
+    _markers.add(Marker(
+        markerId: DateTime.now().toIso8601String(),
+        position: LatLng(37.569968415084, 126.93120094519),
+        infoWindow: '테스트',
+        onMarkerTab: _onMarkerTap,
+      ));
+    setState(() {});
+    */
+    FirebaseFirestore.instance.collection('point1').get().then((value) {
+      if(value.docs.isNotEmpty){
+        for(int i =0; i<value.docs.length; i++){
+          print(value.docs[i]);
+          print('위치 : ${value.docs[i].data()['location'].latitude},'
+                '${value.docs[i].data()['location'].longitude}');
+          _markers.add(Marker(
+            markerId: _markers.length.toString(),
+            position: LatLng(value.docs[i].data()['location'].latitude, value.docs[i].data()['location'].longitude),
+            infoWindow: '인포 윈도우',
+            captionText: value.docs[i].id,
+            captionMinZoom: 15,
+            onMarkerTab: _onMarkerTap));
+          setState(() {});
+        }
+      }
+    });
+
+    /*
+    FirebaseFirestore.instance.collection('point1').get().then((value) {
+      if(value.docs.isNotEmpty){
+          print('firebase 불러오기 성공!');
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            OverlayImage.fromAssetImage(
+              assetName: 'icon/marker.png',
+              context: context,
+            ).then((image) {
+              setState(() {
+                for(int i =0; i<value.docs.length; i++){
+                    print(value.docs[i].data());
+                    _markers.add(Marker(
+                    markerId: 'id',
+                    position: LatLng(
+                      value.docs[i].data()["loaction"].latitude, 
+                      value.docs[i].data()["loaction"].longitude),
+                    captionText: "커스텀 아이콘",
+                    captionColor: Colors.indigo,
+                    captionTextSize: 20.0,
+                    alpha: 0.8,
+                    icon: image,
+                    anchor: AnchorPoint(0.5, 1),
+                    width: 45,
+                    height: 45,
+                    infoWindow: '인포 윈도우',
+                    onMarkerTab: _onMarkerTap));
+                }
+              });
+            });
+          });
+        /*
+        for(int i =0; i<value.docs.length; i++){
+                    print('위치 : ${value.docs[i].data()['loaction'].latitude},'
+                          '${value.docs[i].data()['loaction'].longitude}');
+                    _markers.add(Marker(
+                    markerId: 'id',
+                    position: LatLng(
+                      value.docs[i].data()['loaction'].latitude, 
+                      value.docs[i].data()['loaction'].longitude),
+                    infoWindow: '인포 윈도우',
+                    onMarkerTab: _onMarkerTap));
+        }
+        setState(() {});
+        */
+      }
+    });
+    */
     super.initState();
   }
 
@@ -53,7 +137,7 @@ class _BaseMapPageState extends State<BaseMapPage> {
         children: <Widget>[
           NaverMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(37.566570, 126.978442),
+              target: LatLng(37.569968415084, 126.93120094519),
               zoom: 17,
             ),
             onMapCreated: onMapCreated,
@@ -70,6 +154,7 @@ class _BaseMapPageState extends State<BaseMapPage> {
             onSymbolTap: _onSymbolTap,
             markers: _markers,
           ),
+          if(detail == true)_detailWidget(),
           Padding(
             padding: EdgeInsets.all(16),
             child: _mapTypeSelector(),
@@ -87,16 +172,69 @@ class _BaseMapPageState extends State<BaseMapPage> {
       duration: Duration(milliseconds: 500),
       backgroundColor: Colors.black,
     ));
+    setState(() {
+      detail = false;
+    });
   }
 
   _onMapLongTap(LatLng position) {
+    /*
     _markers.add(Marker(
         markerId: DateTime.now().toIso8601String(),
-        position: position,
+        position: LatLng(37.569968415084, 126.93120094519),
         infoWindow: '테스트',
         onMarkerTab: _onMarkerTap,
       ));
+      for(int i =0; i< _markers.length; i++)
+      {
+        print('마커 ${i}: ${_markers[i].position.latitude},'
+                          '${_markers[i].position.longitude}');
+      }
       setState(() {});
+    */
+    setState(() {
+      _markers.clear();
+    });
+    /*
+    LatLng tmp = LatLng(37.569968415084954, 126.93120094519954);
+    FirebaseFirestore.instance.collection('point1').get().then((value) {
+      if(value.docs.isNotEmpty){
+        for(int i =0; i<value.docs.length; i++){
+                    print('위치 : ${value.docs[i].data()['loaction'].latitude},'
+                          '${value.docs[i].data()['loaction'].longitude}');
+                    OverlayImage.fromAssetImage(
+                      assetName: 'icon/marker.png',
+                      context: context,
+                    ).then((image) {
+                      setState(() {
+                        _markers.add(Marker(
+                            markerId: 'id',
+                            position: tmp,
+                            captionText: "커스텀 아이콘",
+                            captionColor: Colors.indigo,
+                            captionTextSize: 20.0,
+                            alpha: 0.8,
+                            icon: image,
+                            anchor: AnchorPoint(0.5, 1),
+                            width: 45,
+                            height: 45,
+                            infoWindow: '인포 윈도우',
+                            onMarkerTab: _onMarkerTap));
+                      });
+                    });      
+                    //_markers.add(Marker(
+                    //markerId: 'id',
+                    //position: tmp,
+                    //infoWindow: '인포 윈도우',
+                    //onMarkerTab: _onMarkerTap));
+                    //setState(() {});
+        }
+      }
+    });
+    */
+    //setState(() {});
+        
+    
     /*
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
@@ -243,6 +381,7 @@ class _BaseMapPageState extends State<BaseMapPage> {
     print('카메라 움직임 >>> 위치 : ${latLng.latitude}, ${latLng.longitude}'
         '\n원인: $reason'
         '\n에니메이션 여부: $isAnimated');
+    
   }
 
   void _onCameraIdle() {
@@ -272,7 +411,207 @@ class _BaseMapPageState extends State<BaseMapPage> {
   void _onMarkerTap(Marker marker, Map<String, int> iconSize) {
     int pos = _markers.indexWhere((m) => m.markerId == marker.markerId);
     setState(() {
-      _markers[pos].captionText = '선택됨';
+      detail = true;
+      //_markers[pos].captionText = '선택됨';
     });
   }
+
+  Widget _detailWidget() {
+    return DraggableScrollableSheet(
+      maxChildSize: .8,
+      initialChildSize: .53,
+      minChildSize: .53,
+      builder: (context, scrollController) {
+        return Container(
+          padding: AppTheme.padding.copyWith(bottom: 0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40),
+                topRight: Radius.circular(40),
+              ),
+              color: Colors.white),
+          child: SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                SizedBox(height: 5),
+                Container(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 50,
+                    height: 5,
+                    decoration: BoxDecoration(
+                        color: LightColor.iconColor,
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Container(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      TitleText(text: "NIKE AIR MAX 200", fontSize: 25),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              TitleText(
+                                text: "\$ ",
+                                fontSize: 18,
+                                color: LightColor.red,
+                              ),
+                              TitleText(
+                                text: "240",
+                                fontSize: 25,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Icon(Icons.star,
+                                  color: LightColor.yellowColor, size: 17),
+                              Icon(Icons.star,
+                                  color: LightColor.yellowColor, size: 17),
+                              Icon(Icons.star,
+                                  color: LightColor.yellowColor, size: 17),
+                              Icon(Icons.star,
+                                  color: LightColor.yellowColor, size: 17),
+                              Icon(Icons.star_border, size: 17),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                _availableSize(),
+                SizedBox(
+                  height: 20,
+                ),
+                _availableColor(),
+                SizedBox(
+                  height: 20,
+                ),
+                _description(),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _availableSize() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        TitleText(
+          text: "Available Size",
+          fontSize: 14,
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _sizeWidget("US 6"),
+            _sizeWidget("US 7", isSelected: true),
+            _sizeWidget("US 8"),
+            _sizeWidget("US 9"),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _sizeWidget(String text,
+      {Color color = LightColor.iconColor, bool isSelected = false}) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        border: Border.all(
+            color: LightColor.iconColor,
+            style: !isSelected ? BorderStyle.solid : BorderStyle.none),
+        borderRadius: BorderRadius.all(Radius.circular(13)),
+        color:
+            isSelected ? LightColor.orange : Theme.of(context).backgroundColor,
+      ),
+      child: TitleText(
+        text: text,
+        fontSize: 16,
+        color: isSelected ? LightColor.background : LightColor.titleTextColor,
+      ),
+    ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)));
+  }
+
+  Widget _availableColor() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        TitleText(
+          text: "Available Size",
+          fontSize: 14,
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            _colorWidget(LightColor.yellowColor, isSelected: true),
+            SizedBox(
+              width: 30,
+            ),
+            _colorWidget(LightColor.lightBlue),
+            SizedBox(
+              width: 30,
+            ),
+            _colorWidget(LightColor.black),
+            SizedBox(
+              width: 30,
+            ),
+            _colorWidget(LightColor.red),
+            SizedBox(
+              width: 30,
+            ),
+            _colorWidget(LightColor.skyBlue),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _colorWidget(Color color, {bool isSelected = false}) {
+    return CircleAvatar(
+      radius: 12,
+      backgroundColor: color.withAlpha(150),
+      child: isSelected
+          ? Icon(
+              Icons.check_circle,
+              color: color,
+              size: 18,
+            )
+          : CircleAvatar(radius: 7, backgroundColor: color),
+    );
+  }
+
+  Widget _description() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        TitleText(
+          text: "Available Size",
+          fontSize: 14,
+        ),
+        SizedBox(height: 20),
+        Text('Hello World'),
+      ],
+    );
+  }
+
 }

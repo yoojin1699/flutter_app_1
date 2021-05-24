@@ -5,6 +5,7 @@ import 'package:flutter_application_1/screens/edit_profile_page.dart';
 import 'package:flutter_application_1/screens/temp.dart';
 import 'package:flutter_application_1/screens/feeds.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_application_1/base_map.dart';
 
 import 'FabcontainerPage.dart';
 
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   final List<Widget> viewContainer = [
-    TempScreen(), // mapping
+    BaseMapPage(), // mapping
     Timeline(), // feed
     FabcontainerPage(), // create post
     TempScreen(), // kakao pay
